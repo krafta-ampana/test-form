@@ -24,33 +24,28 @@
 	
 	
 	<script>
-	document.getElementById("ucapanForm").addEventListener("submit", function(event) {
-		event.preventDefault();
+		document.getElementById("ucapanForm").addEventListener("submit", function(e) {
+			e.preventDefault();
 
-		var clientID = document.getElementById("client_id_ucapan").value;
-		var nama = document.getElementById("nama_ucapan").value;
-		var ucapan = document.getElementById("ucapan_ucapan").value;
+			var formData = new FormData();
+			formData.append("type", "ucapan");
+			formData.append("client_id", document.getElementById("client_id_ucapan").value);
+			formData.append("nama", document.getElementById("nama_ucapan").value);
+			formData.append("ucapan", document.getElementById("ucapan_ucapan").value);
 
-		var data = {
-			client_id: clientID,
-			nama: nama,
-			ucapan: ucapan
-		};
-
-		fetch("https://script.google.com/macros/s/AKfycbzwc2FaRlLr7ExJjyFKa_xYXPKMcpSjrWGevACqyusEz2u2A_4aWLhgbfCijh-_FHe1Gg/exec", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(data)
-		})
-		.then(response => response.text())
-		.then(result => {
-			document.getElementById("statusUcapan").innerText = "Ucapan berhasil dikirim!";
-			document.getElementById("ucapanForm").reset();
-		})
-		.catch(error => console.error("Error:", error));
-	});
+			fetch("https://script.google.com/macros/s/AKfycbzwc2FaRlLr7ExJjyFKa_xYXPKMcpSjrWGevACqyusEz2u2A_4aWLhgbfCijh-_FHe1Gg/exec", {
+				method: "POST",
+				body: formData
+			})
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("statusUcapan").innerText = data;
+			})
+			.catch(error => {
+				document.getElementById("statusUcapan").innerText = "Masalah saat menyimpan data, harap coba lagi nanti!";
+			});
+		});
 	</script>		
-	
 	
 	
 </body>
